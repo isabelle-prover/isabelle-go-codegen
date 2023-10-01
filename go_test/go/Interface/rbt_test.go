@@ -1,11 +1,11 @@
 package rbt
 
 import (
-  "testing"
-  "isabelle/exported/Bigint"
+	"isabelle/exported/Bigint"
+	"testing"
 )
 
-func TestSimple (t* testing.T) {
+func TestSimple(t *testing.T) {
 	array := [5]Bigint.Int{Bigint.MkInt("1"), Bigint.MkInt("2"), Bigint.MkInt("3"), Bigint.MkInt("4"), Bigint.MkInt("5")}
 	elements := MkList(array[:])
 
@@ -13,7 +13,7 @@ func TestSimple (t* testing.T) {
 	if !ok {
 		t.Fatal("new tree does not satisfy invariant")
 	}
-	_, ok = JoinAndCheck(LinorderInt, t1, t1);
+	_, ok = JoinAndCheck(LinorderInt, t1, t1)
 	if !ok {
 		t.Fatal("joining trees violated invariant")
 	}
