@@ -1,4 +1,3 @@
-
 (* Author: Florian Haftmann, TU Muenchen *)
 
 section \<open>A huge collection of equations to generate code from\<close>

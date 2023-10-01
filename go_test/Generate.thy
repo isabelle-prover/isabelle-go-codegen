@@ -1,4 +1,3 @@
-
 (* Author: Florian Haftmann, TU Muenchen *)
 
 section \<open>Pervasive test of code generator\<close>
