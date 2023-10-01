@@ -1,4 +1,3 @@
-
 theory Generate_Binary_Nat
 imports
   "Candidates"
