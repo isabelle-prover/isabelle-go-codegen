@@ -712,7 +712,7 @@ fun serialize_go gen_stringer go_module undefineds infinite_types ctxt { module_
       then Code_Target.Singleton ("go", snd (hd p))
       else Code_Target.Hierarchy ((["go.mod"], Pretty.chunks2 [
         concat [str "module",(str o print_go_string) go_module],
-        str "go 1.19"
+        str "go 1.18"
       ]) :: p),
     try (deresolver [])
   ) end;
