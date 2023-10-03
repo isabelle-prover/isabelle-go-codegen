@@ -22,7 +22,8 @@ isabelle build -v -e -D .
 ~~~
 
 This will build the `Go_Test` session and export some sample code to
-`go_text/export`.
+`go_test/export`. If run for the first time, this may take quite a
+while to complete (half an hour on a slow machine).
 
 To test the generated code, run the following commands:
 
@@ -30,6 +31,8 @@ To test the generated code, run the following commands:
 cd go_test/go
 go test -v ./Interface
 ~~~
+
+This should produce some (successful) test output, indicated with `PASS`.
 
 The `go_test/go` folder contains some hand-written wrapper code that references
 the generated code in `go_test/export`. Note that the above invocation of
@@ -52,6 +55,9 @@ docker run -it --rm isabelle_go_test
 
 If you supply a different entry point when starting the container (e.g.
 `/bin/bash`), you can also play with the Go target interactively.
+
+Again, the `docker build` may take quite a while, but `docker run`
+should complete within a few minutes.
 
 In the container, the code will be generated into the folder
 `/home/isabelle/go-code-gen/go_test/export`. By using the following Docker
