@@ -1,5 +1,7 @@
 # Go Code Generation for Isabelle
 
+[![DOI](https://zenodo.org/badge/697269869.svg)](https://zenodo.org/badge/latestdoi/697269869)
+
 This repository contains a standalone Code Generation Target for the Go
 programming language for use with Isabelle2023.
 
