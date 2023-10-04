@@ -51,7 +51,7 @@ session.
 Build and run the Docker image as follows:
 
 ~~~shell
-docker build -t isabelle_go_test
+docker build -t isabelle_go_test .
 docker run -it --rm isabelle_go_test
 ~~~
 
