@@ -284,15 +284,20 @@ fun print_go_stmt gen_stringer undefineds infinite_types tyco_syntax const_synta
                ])
             |> separate (str "&&")
             |> concat
-        in Pretty.chunks
-           ((if is_boxed then [oneline [(block o commas) [str (if any_names then q else "_"), str p], str ":=", 
-              applify ".(" ")" I NOBR (str target) [apply_constraints tyvars ((str o deresolve) constr) typargs]]]
-            else [oneline [str "_ =", str target]])
-          @ [(if is_boxed then block_enclose (spaced [str "if", str p, str "{"], str "}") else Pretty.chunks)
-              ((if any_names then [oneline ((Pretty.block o commas) names :: [str ":=",  applify "(" ")" str NOBR (str destructor) [if is_boxed then q else target]])]
-                else [])
-               @ [(if null conds then Pretty.chunks else (block_enclose ((spaced [str "if", checks, str "{"]), str "}")))
-                   [body]])])
+          val unwrap_if_boxed = if is_boxed
+            then let
+               val check = oneline [(block o commas) [str (if any_names then q else "_"), str p], str ":=",
+                   applify ".(" ")" I NOBR (str target) [apply_constraints tyvars ((str o deresolve) constr) typargs]]
+              in block_enclose (spaced [str "if", check, str p, str "{"], str "}") end
+            else (fn body => Pretty.chunks (oneline [str "_ =", str target] :: body))
+        in
+         unwrap_if_boxed ((if any_names
+           then [oneline ((Pretty.block o commas) names :: [str ":=", applify "(" ")" str NOBR (str destructor) [if is_boxed then q else target]])]
+           else [])
+         @ [(if null conds
+               then Pretty.chunks
+               else block_enclose ((spaced [str "if", checks, str "{"]), str "}"))
+             [body]])
         end
       in case pattern
         of IConst c =>
@@ -320,7 +325,6 @@ fun print_go_stmt gen_stringer undefineds infinite_types tyco_syntax const_synta
                   in ((SOME name :: ts, (name, term) :: rs, cs), intro_vars [name] vars) end)
               args (([],[],[]), vars)
             val [q] = Name.invent (snd vars) "q" 1
-            val vars = intro_vars [q] vars
             val wrapper = print_condition vars' conds (#sym constr, #typargs constr, #range constr, arg_names) p q target
             val subpatterns' = subpatterns @ subps
           in wrapper (if subpatterns' = []
@@ -345,9 +349,9 @@ fun print_go_stmt gen_stringer undefineds infinite_types tyco_syntax const_synta
       end
     and print_pattern_match is_stmt tyvars some_thm vars rtyp target clauses =
       let
-        val [target_var] = Name.invent (snd vars) "target" 1
+        val [target_var] = Name.invent (snd vars) "scrutinee" 1
         val vars = intro_vars [target_var] vars
-        val [p] = Name.invent (snd vars) "m" 1
+        val [p] = Name.invent (snd vars) "ok" 1
         val vars = intro_vars [p] vars
         val target = print_go_expr const_syntax tyvars some_thm vars NOBR target
         val assignment = oneline [str target_var, str ":=", target]
@@ -478,23 +482,28 @@ fun print_go_stmt gen_stringer undefineds infinite_types tyco_syntax const_synta
         val (tys', ty') = Code_Thingol.unfold_fun_n (length params) ty;
         fun print_rhs is_stmt vars' ((_, t), (some_thm, _)) =
           print_go_term_gen is_stmt const_syntax tyvars some_thm vars' NOBR t;
-        val [p] = Name.invent (snd vars2) "m" 1
+        val [p] = Name.invent (snd vars2) "ok" 1
         val vars3 = intro_vars [p] vars2
         fun print_fun_clause ((targets, t), (some_thm, _)) =
           let
             val used = Code_Thingol.add_varnames t []
+            val renamed_params = params ~~ targets
+              |> filter (fn (_, IVar NONE) => false | (a, IVar b) => a <> b | _ => false)
+              |> split_list |> snd
             val vars' =
-              intro_vars (build (fold Code_Thingol.add_varnames targets)) vars2;
+              intro_vars (build (fold Code_Thingol.add_varnames renamed_params)) vars2;
             fun remove_unused (IVar (SOME name)) = IVar
                 (if member (op =) used name then SOME name else NONE)
               | remove_unused t = t
             val clauses = params ~~ targets
               |> map (apsnd (map_terms_bottom_up remove_unused))
-              |> filter (fn (_, IVar NONE) => false | _ => true)
-              |> map_filter (fn (NONE, _) => NONE | (SOME v, t) => SOME (v,t))
-            val clause = print_clause tyvars some_thm vars' p clauses t
-          in
-            wrap_new_scope clause
+              |> filter (fn (_, IVar NONE) => false | (a, IVar b) => a <> b | _ => true)
+              |> map_filter (fn (NONE, _) => NONE
+                              | (SOME v, t) => SOME (v,t))
+              |> sort (fn (_, (_, IVar _)) => LESS | ((_, IVar _),_) => GREATER | _ => EQUAL)
+          in if null clauses
+           then print_go_term const_syntax tyvars some_thm vars' NOBR t
+           else print_clause tyvars some_thm vars' p clauses t
           end;
         val dict_args = print_dict_args tyvars vs
         val head = print_func_head tyvars vars3 ((SOME o Constant) const) (map fst vs) dict_args params tys' (print_go_typ tyvars ty');
