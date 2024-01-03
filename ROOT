@@ -1,10 +1,14 @@
 session Go = HOL +
   description "A Go frontend for the code generator."
+  options [timeout = 300]
   theories
     Go_Setup
+  document_files
+    "root.tex"
 
 session Go_Test_Quick in "test/quick" = Go +
   description "Quick test session with BigInts and RBTs"
+  options [timeout = 300]
   sessions
     "HOL-Data_Structures"
   theories [document = false]
@@ -14,6 +18,7 @@ session Go_Test_Quick in "test/quick" = Go +
 
 session Go_Test_Slow in "test/slow" = "HOL-Library" +
   description "Slow test session for (almost) the entire HOL-Library"
+  options [timeout = 1200]
   sessions
     Go
     "HOL-Number_Theory"

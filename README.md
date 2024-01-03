@@ -3,7 +3,7 @@
 [![DOI](https://zenodo.org/badge/697269869.svg)](https://zenodo.org/badge/latestdoi/697269869)
 [![arXiv](https://img.shields.io/badge/arXiv-2310.02704-b31b1b.svg)](https://arxiv.org/abs/2310.02704)
 
-This repository contains a standalone Code Generation Target for the Go
+This repository contains a standalone code generation target for the Go
 programming language for use with Isabelle2023.
 
 To use it, simply import the `Go` session defined herein into your own development,
