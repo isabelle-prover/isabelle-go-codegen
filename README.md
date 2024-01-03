@@ -15,25 +15,25 @@ export_code <name> in Go
 
 which produces code that can be used from Go.
 
-## Trying it out
+## Trying it out (the quick version)
 
-This repository contains a test session `Go_Test`. If you have Isabelle2023
-installed, just run the following command:
+This repository contains a test session `Go_Test_Quick`. If you have
+Isabelle2023 installed, just run the following command:
 
 ~~~shell
-isabelle build -v -e -D .
+isabelle build -v -e -d . Go_Test_Quick
 ~~~
 
-This will build the `Go_Test` session and export some sample code to
-`go_test/export`. If run for the first time, this may take quite a
-while to complete (half an hour on a slow machine).
+This will build the session and export some sample code to `test/quick/export`.
+This will typically take less than a minute (or a few minutes on a slow
+machine).
 
 The generated code contains BigInts and a Red Black Tree data structure.
 
 To test the generated code, run the following commands:
 
 ~~~shell
-cd go_test/go
+cd test/quick/go
 go test -v ./Interface
 ~~~
 
@@ -51,12 +51,30 @@ PASS
 ok  	isabelle/exported/Interface	0.002s
 ~~~
 
-The `go_test/go` folder contains some hand-written wrapper code that references
-the generated code in `go_test/export`. Note that the above invocation of
-`go test` will fail if the generated code is not present.
+The `test/quick/go` folder contains some hand-written wrapper code that
+references the generated code in `test/quick/export`. Note that the above
+invocation of `go test` will fail if the generated code is not present.
 
 The purpose of the hand-written code is to demonstrate that the generated code
 does indeed run as expected.
+
+## Testing the whole thing
+
+Besides the `Go_Test_Quick` test session, there is also a `Go_Test_Slow` test
+session, which -- as the name indicates -- takes much longer to execute:
+
+~~~shell
+isabelle build -v -e -d . Go_Test_Slow
+~~~
+
+Alternatively, you can test the whole thing:
+
+~~~shell
+isabelle build -v -e -D .
+~~~
+
+If run this for the first time, it may take quite a while to complete (half an
+hour on a slow machine).
 
 ## Using Docker/Podman
 
@@ -73,16 +91,16 @@ docker run -it --rm isabelle_go_test
 If you supply a different entry point when starting the container (e.g.
 `/bin/bash`), you can also play with the Go target interactively.
 
-Again, the `docker build` may take quite a while, but `docker run`
-should complete within a few minutes.
+The first command (`docker build`) should be fairly quick, but as above,
+`docker run` may take quite a while.
 
 In the container, the code will be generated into the folder
-`/home/isabelle/go-code-gen/go_test/export`. By using the following Docker
+`/home/isabelle/go-code-gen/test/quick/export`. By using the following Docker
 commands, you can inspect the generated files:
 
 ~~~shell
 docker run -it --name=generated_go isabelle_go_test
-docker cp generated_go:/home/isabelle/go-code-gen/go_test/export <local_directory>
+docker cp generated_go:/home/isabelle/go-code-gen/test/quick/export <local_directory>
 ~~~
 
 This instructs Docker not to delete the temporary container, and then uses

@@ -1,5 +1,5 @@
-theory Go_Setup imports 
-    "Main"
+theory Go_Setup
+  imports "Main"
 begin
 
 ML_file \<open>code_go.ML\<close>
@@ -8,7 +8,6 @@ code_identifier
   code_module Code_Target_Nat \<rightharpoonup> (Go) Arith
 | code_module Code_Target_Int \<rightharpoonup> (Go) Arith
 | code_module Code_Numeral \<rightharpoonup> (Go) Arith
-
 
 code_printing
   constant Code.abort \<rightharpoonup>
