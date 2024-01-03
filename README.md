@@ -28,6 +28,8 @@ This will build the `Go_Test` session and export some sample code to
 `go_test/export`. If run for the first time, this may take quite a
 while to complete (half an hour on a slow machine).
 
+The generated code contains BigInts and a Red Black Tree data structure.
+
 To test the generated code, run the following commands:
 
 ~~~shell
@@ -35,7 +37,19 @@ cd go_test/go
 go test -v ./Interface
 ~~~
 
-This should produce some (successful) test output, indicated with `PASS`.
+This should produce some (successful) test output, indicated with `PASS`:
+
+~~~data
+go test -v ./Interface
+=== RUN   TestTreeFromList
+--- PASS: TestTreeFromList (0.00s)
+=== RUN   TestJoinAndCheck
+--- PASS: TestJoinAndCheck (0.00s)
+=== RUN   TestDelAndCheck
+--- PASS: TestDelAndCheck (0.00s)
+PASS
+ok  	isabelle/exported/Interface	0.002s
+~~~
 
 The `go_test/go` folder contains some hand-written wrapper code that references
 the generated code in `go_test/export`. Note that the above invocation of
