@@ -1,0 +1,13 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --tag isabelle_go_test
+    - name: Run the Docker image
+      run: docker run --rm isabelle_go_test
