@@ -7,7 +7,8 @@ RUN apt-get -y update && \
   rm -rf /var/lib/apt/lists/*
 USER isabelle
 
-COPY --chown=isabelle:users ROOT document *.ML *.thy go-code-gen/
+COPY --chown=isabelle:users ROOT *.ML *.thy go-code-gen/
+COPY --chown=isabelle:users document go-code-gen/document/
 COPY --chown=isabelle:users test go-code-gen/test/
 
 ENV ISABELLE_GO=/usr/bin/go
