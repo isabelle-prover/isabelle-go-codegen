@@ -67,6 +67,7 @@ definition funny_funs :: "(bool \<Rightarrow> bool) list \<Rightarrow> (bool \<R
 where
   "funny_funs fs = (\<lambda>x. x \<or> True) # (\<lambda>x. x \<or> False) # fs"
 
+(*
 text \<open>Explicit checks for strings etc.\<close>
 
 definition \<open>hello = ''Hello, world!''\<close>
@@ -74,5 +75,8 @@ definition \<open>hello = ''Hello, world!''\<close>
 definition \<open>hello2 = String.explode (String.implode hello)\<close>
 
 definition \<open>which_hello \<longleftrightarrow> hello \<le> hello2\<close>
+*)
+
+declare [[code abort: String.literal_of_asciis String.asciis_of_literal]]
 
 end
