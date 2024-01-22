@@ -7,6 +7,6 @@ echo "Exporting to $file ..."
 
 git archive \
   --format=zip \
-  --prefix=Go_Codegen/ \
+  --prefix=Go/ \
   --output="$file" \
   HEAD

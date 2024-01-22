@@ -1,3 +1,5 @@
+chapter AFP
+
 session Go = HOL +
   description "A Go frontend for the code generator."
   options [timeout = 300]
