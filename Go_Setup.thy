@@ -38,27 +38,9 @@ definition "go_private_fold_list" where
 
 code_printing
   type_constructor String.literal \<rightharpoonup> (Go) "string"
-| code_module "StrLiteral" \<rightharpoonup> (Go) \<open>package StrLiteral
-
-import "math/big"
-
-func CharOfAscii (i big.Int) rune {
-  return rune(i.Int64())
-}
-
-func AsciiOfChar (r rune) big.Int {
-  var i big.Int
-  i.SetInt64(int64(r))
-  return i
-}
-\<close> for constant String.asciis_of_literal String.literal_of_asciis
 | constant "STR ''''" \<rightharpoonup> (Go) "\"\""
 | constant "Groups.plus_class.plus :: String.literal \<Rightarrow> _ \<Rightarrow> _" \<rightharpoonup>
     (Go) infix 6 "+"
-| constant String.literal_of_asciis \<rightharpoonup>
-    (Go) "Go'_private'_fold'_list[rune, string](func(r rune) func(string) string { return func(acc string) string { return string(r) + acc; } } , Go'_private'_map'_list[Bigint.Int, rune](StrLiteral.CharOfAscii, _ ), \"\")"
-| constant String.asciis_of_literal \<rightharpoonup>
-    (Go) "func () List[Bigint.Int] { var a string = _ ; list := List[Bigint.Int](Nil[Bigint.Int]{}); for '_, c := range a { list = List[Bigint.Int](Cons[Bigint.Int]{StrLiteral.AsciiOfChar(c), list}) }; return list; }()"
 | constant "HOL.equal :: String.literal \<Rightarrow> String.literal \<Rightarrow> bool" \<rightharpoonup>
     (Go) infix 4 "=="
 | constant "(\<le>) :: String.literal \<Rightarrow> String.literal \<Rightarrow> bool" \<rightharpoonup>
