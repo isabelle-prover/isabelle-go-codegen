@@ -1,18 +1,13 @@
-FROM docker.io/makarius/isabelle:Isabelle2023
-
-USER root
-RUN apt-get -y update && \
-  apt-get install -y golang && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-USER isabelle
+FROM docker.io/makarius/isabelle:Isabelle2024
 
 COPY --chown=isabelle:users ROOT *.ML *.thy go-code-gen/
 COPY --chown=isabelle:users document go-code-gen/document/
 COPY --chown=isabelle:users test go-code-gen/test/
 
-ENV ISABELLE_GO=/usr/bin/go
+ENV PATH "$PATH:/home/isabelle/Isabelle/bin"
 
-ENTRYPOINT Isabelle/bin/isabelle build -v -e -D go-code-gen && \
+RUN isabelle go_setup
+
+ENTRYPOINT isabelle build -v -e -D go-code-gen && \
   cd ./go-code-gen/test/quick/go && \
-  go test  -v ./Interface
+  isabelle go test -v ./Interface

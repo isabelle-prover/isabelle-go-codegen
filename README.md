@@ -4,7 +4,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2310.02704-b31b1b.svg)](https://arxiv.org/abs/2310.02704)
 
 This repository contains a standalone code generation target for the Go
-programming language for use with Isabelle2023.
+programming language for use with Isabelle2024.
 
 To use it, simply import the `Go` session defined herein into your own development,
 and import the `Go_Setup` theory. Code can then be exported in the usual way with
@@ -18,7 +18,7 @@ which produces code that can be used from Go.
 ## Trying it out (the quick version)
 
 This repository contains a test session `Go_Test_Quick`. If you have
-Isabelle2023 installed, just run the following command:
+Isabelle2024 installed, just run the following command:
 
 ~~~shell
 isabelle build -v -e -d . Go_Test_Quick
@@ -75,6 +75,28 @@ isabelle build -v -e -D .
 
 If run this for the first time, it may take quite a while to complete (half an
 hour on a slow machine).
+
+## Bundled Go version
+
+Since Isabelle2024, the Isabelle distribution ships with a script to
+automatically install Go. If you prefer to only manually install Isabelle, but
+not Go, this is how you can get started:
+
+~~~shell
+isabelle go_setup
+~~~
+
+Afterwards, you can run the bundled Go version as follows:
+
+~~~shell
+isabelle go
+~~~
+
+The latter command behaves exactly like a direct invocation of `go`.
+
+The Docker image contained in this repository (see below) uses this bundled
+version. Due to Go's backwards compatibility, any version of Go including or
+after 1.18 should work.
 
 ## Using Docker/Podman
 
